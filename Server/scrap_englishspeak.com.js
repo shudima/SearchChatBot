@@ -18,7 +18,7 @@ for(var lessonId = 1; lessonId <= 100; lessonId++)
     request(url, function(err, resp, body) {
 
         if (err)
-            throw err;
+            return;
         $ = cheerio.load(body);
         
         question = ''

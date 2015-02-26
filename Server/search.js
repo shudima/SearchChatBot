@@ -1,9 +1,13 @@
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 function getQueryForText(text)
 {
 	question_type = 'regular'
 
 	if(text.indexOf('?') >0) question_type = 'question'
-		
+
 	var query = {
 				  "query": {
 				    "bool": {
@@ -32,7 +36,11 @@ module.exports = {
 		    	{
 			    	question_data = JSON.parse(data)
 			    	console.log(question_data)
-			    	answer_text = question_data['hits']['hits'][0]['_source']['answer_text']
+
+			    	hits = question_data['hits']['hits']
+
+			    	hit_number = getRandomInt(0, hits.length / 2)
+			    	answer_text = question_data['hits']['hits'][hit_number]['_source']['answer_text']
 				}
 				catch(err)
 				{
