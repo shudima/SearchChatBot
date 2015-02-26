@@ -24,10 +24,11 @@ var server = http.createServer(function(req, res) {
 	{
 
 	   	// Search for answer if for given question
-		search.getAnswerForText(elasticSearchClient, query.text, function(answer_text){
+		search.getAnswerForText(elasticSearchClient, query.text, function(answer_text, sentiment){
 
+			//console.log(sentiment)
 			res.setHeader('Access-Control-Allow-Origin', '*');
-			res.end(JSON.stringify({ 'answer_text': answer_text }));
+			res.end(JSON.stringify({ 'answer_text': answer_text, 'sentiment' : sentiment }));
 		})
 	}
 	else

@@ -9,7 +9,9 @@
 <body>
 
 <div ng-app="" ng-controller="chatController">
-
+		<center>
+			<img src="{{ img_src }}">
+		</center>
   		<span ng-repeat="msg in history track by $index">
     		{{ msg }} <br>
   		</span>
