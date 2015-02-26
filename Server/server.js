@@ -1,34 +1,43 @@
 var http = require('http');
-ElasticSearchClient = require('elasticsearchclient');
+var url = require('url');
+var search = require('./search')
 
+var port_number = 8080
+
+// Init elastic search
+var ElasticSearchClient = require('elasticsearchclient');
 var serverOptions = {
     host: 'localhost',
     port: 9200
 };
 
-var elasticSearchClient = new ElasticSearchClient(serverOptions);
 
-var qryObj = {
-    'field' : 'term'
-}
-
-elasticSearchClient.search('my_index_name', 'my_type_name', qryObj)
-    .on('data', function(data) {
-        console.log(JSON.parse(data))
-    })
-    .on('done', function(){
-        //always returns 0 right now
-    })
-    .on('error', function(error){
-        console.log(error)
-    })
-    .exec()
-
-
+// create server
 var server = http.createServer(function(req, res) {
-  console.log('New request: ' + req)
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.end(JSON.stringify({ answer_text: "Hello from http" }));
+
+  	var url_parts = url.parse(req.url, true);
+  	var query = url_parts.query;
+  	var elasticSearchClient = new ElasticSearchClient(serverOptions);
+	console.log('New request: ' + query.text)
+   	
+	if (query.text != undefined)
+	{
+
+	   	// Search for answer if for given question
+		search.getAnswerForText(elasticSearchClient, query.text, function(answer_text){
+
+			res.setHeader('Access-Control-Allow-Origin', '*');
+			res.end(JSON.stringify({ 'answer_text': answer_text }));
+		})
+	}
+	else
+	{
+		res.end();
+	}
+
 });
-console.log('Starts listening on 8080')
-server.listen(8180);
+
+// start server
+server.listen(port_number);
+console.log('Listening on ' + port_number)
+

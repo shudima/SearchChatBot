@@ -4,7 +4,7 @@ function chatController($scope, $http) {
 
 	$scope.getAnswer = function($http, question)
 	{
-		$http.get("http://localhost:8080/")
+		$http.get("http://localhost:8080/?text=" + question)
     	     .success(function(response) { $scope.history.push("Bot: " + response.answer_text);})
     		 .error(function(data, status, headers, config) { alert(status);});
 	}
